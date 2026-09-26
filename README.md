@@ -1,16 +1,102 @@
-# React + Vite
+# 🎬 PopChoice — AI Movie Recommendation App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PopChoice is an AI-powered movie recommendation app that helps users discover movies based on their preferences, interests, and viewing mood.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* 🎯 Personalized movie recommendations
+* 🤖 AI-powered recommendation engine
+* 🔎 Movie preference-based search
+* 🧠 Semantic/vector search for better recommendations
+* ⚡ Fast React + Vite frontend
+* 🔐 Secure backend API
+* ☁️ Supabase database and vector storage
+* 🚀 Vercel frontend + Render backend deployment
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Frontend**
 
-## Expanding the ESLint configuration
+* React
+* Vite
+* JavaScript
+* Tailwind CSS
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Backend**
+
+* Node.js
+* Express.js
+* OpenAI-compatible AI API
+* Hugging Face Transformers
+
+**Database & Infrastructure**
+
+* Supabase PostgreSQL
+* pgvector
+* Vercel
+* Render
+
+## 📁 Project Structure
+
+```text
+ai-movie-recommendation-app/
+├── web/                 # React/Vite frontend
+├── src/                
+├── package.json
+└── README.md
+
+├── api/               
+├── src/                 # Express backend
+├── package.json
+└── README.md
+```
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/jaysofty/ai-movie-recommendation-app.git
+cd ai-movie-recommendation-app
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+For the frontend:
+
+```bash
+cd web
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file and add your required API, Supabase, and AI credentials.
+
+### 4. Run the app
+
+Start the backend:
+
+```bash
+cd api
+npm run dev
+```
+
+Start the frontend:
+
+```bash
+cd web
+npm run dev
+```
+
+## 🎯 Goal
+
+PopChoice demonstrates how AI, embeddings, vector search, and modern web technologies can be combined to build a personalized movie discovery experience.
+
+## 📄 License
+
+This project is for learning and development purposes.
