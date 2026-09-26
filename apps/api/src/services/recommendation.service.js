@@ -17,34 +17,6 @@ function formatMovie(movie) {
   };
 }
 
-// async function findMovieCandidates(preferences) {
-//   const query = buildRecommendationQuery(preferences);
-
-//   console.log("\nSemantic recommendation query:");
-//   console.log(query);
-
-//   const embedding = await createEmbedding(query);
-
-//   const { data, error } = await supabase.rpc("match_movies", {
-//     query_embedding: embedding,
-//     match_count: 5,
-//   });
-//   console.log("\nRAW RPC RESULTS:");
-
-//   console.dir(data, { depth: null });
-
-//   if (error) {
-//     console.error("Movie similarity search failed:", error);
-//     throw error;
-//   }
-
-//   if (!data || data.length === 0) {
-//     throw new Error("No matching movies found");
-//   }
-
-//   return data.map(formatMovie);
-// }
-
 async function findMovieCandidates(preferences) {
   const query = buildRecommendationQuery(preferences);
 
@@ -57,25 +29,20 @@ async function findMovieCandidates(preferences) {
     query_embedding: embedding,
     match_count: 5,
   });
+  console.log("\nRAW RPC RESULTS:");
+
+  console.dir(data, { depth: null });
 
   if (error) {
     console.error("Movie similarity search failed:", error);
     throw error;
   }
 
-  console.log("\n========== RAW SUPABASE RPC DATA ==========");
-  console.dir(data, { depth: null });
-
   if (!data || data.length === 0) {
     throw new Error("No matching movies found");
   }
 
-  const formattedMovies = data.map(formatMovie);
-
-  console.log("\n========== FORMATTED MOVIES ==========");
-  console.dir(formattedMovies, { depth: null });
-
-  return formattedMovies;
+  return data.map(formatMovie);
 }
 
 export async function generateRecommendation(preferences) {
@@ -96,11 +63,27 @@ export async function generateRecommendation(preferences) {
     (movie) => movie.id === recommendation.movieId,
   );
 
+  console.log("\n========== GROQ RESPONSE ==========");
+console.dir(recommendation, { depth: null });
+
+console.log("\n========== SELECTED MOVIE ==========");
+console.dir(selectedMovie, { depth: null });
+
   if (!selectedMovie) {
     throw new Error(
       "Groq selected a movie that was not in the retrieved candidates",
     );
   }
+
+  console.log("\n========== FINAL RESPONSE ==========");
+console.dir(
+  {
+    movie: selectedMovie,
+    reason: recommendation.reason,
+    matchHighlights: recommendation.matchHighlights,
+  },
+  { depth: null },
+);
 
   return {
     movie: selectedMovie,
