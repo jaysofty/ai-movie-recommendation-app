@@ -17,6 +17,34 @@ function formatMovie(movie) {
   };
 }
 
+// async function findMovieCandidates(preferences) {
+//   const query = buildRecommendationQuery(preferences);
+
+//   console.log("\nSemantic recommendation query:");
+//   console.log(query);
+
+//   const embedding = await createEmbedding(query);
+
+//   const { data, error } = await supabase.rpc("match_movies", {
+//     query_embedding: embedding,
+//     match_count: 5,
+//   });
+//   console.log("\nRAW RPC RESULTS:");
+
+//   console.dir(data, { depth: null });
+
+//   if (error) {
+//     console.error("Movie similarity search failed:", error);
+//     throw error;
+//   }
+
+//   if (!data || data.length === 0) {
+//     throw new Error("No matching movies found");
+//   }
+
+//   return data.map(formatMovie);
+// }
+
 async function findMovieCandidates(preferences) {
   const query = buildRecommendationQuery(preferences);
 
@@ -29,20 +57,25 @@ async function findMovieCandidates(preferences) {
     query_embedding: embedding,
     match_count: 5,
   });
-  console.log("\nRAW RPC RESULTS:");
-
-  console.dir(data, { depth: null });
 
   if (error) {
     console.error("Movie similarity search failed:", error);
     throw error;
   }
 
+  console.log("\n========== RAW SUPABASE RPC DATA ==========");
+  console.dir(data, { depth: null });
+
   if (!data || data.length === 0) {
     throw new Error("No matching movies found");
   }
 
-  return data.map(formatMovie);
+  const formattedMovies = data.map(formatMovie);
+
+  console.log("\n========== FORMATTED MOVIES ==========");
+  console.dir(formattedMovies, { depth: null });
+
+  return formattedMovies;
 }
 
 export async function generateRecommendation(preferences) {
