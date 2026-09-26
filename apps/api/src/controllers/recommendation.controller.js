@@ -13,6 +13,14 @@ export async function createRecommendation(req, res) {
 
     const recommendation = await generateRecommendation(preferences);
 
+    console.log("========== CONTROLLER RESPONSE ==========");
+    console.log(JSON.stringify(recommendation, null, 2));
+
+    console.log(
+      "POSTER URL BEFORE EXPRESS:",
+      recommendation.movie?.posterUrl,
+    );
+
     return res.status(200).json({
       success: true,
       data: recommendation,
