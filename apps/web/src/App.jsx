@@ -1,5 +1,5 @@
 import { useState } from "react";
-import StartScreen from "./components/startScreen";
+import StartScreen from "./components/StartScreen";
 import QuestionFlow from "./components/QuestionFlow";
 import MovieResult from "./components/MovieResult";
 import { getRecommendation } from "./lib/api";
