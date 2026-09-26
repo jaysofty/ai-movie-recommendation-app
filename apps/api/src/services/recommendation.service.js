@@ -29,6 +29,9 @@ async function findMovieCandidates(preferences) {
     query_embedding: embedding,
     match_count: 5,
   });
+  console.log("\nRAW RPC RESULTS:");
+
+  console.dir(data, { depth: null });
 
   if (error) {
     console.error("Movie similarity search failed:", error);
@@ -48,9 +51,7 @@ export async function generateRecommendation(preferences) {
   console.log("\nRetrieved candidates:");
 
   for (const movie of candidates) {
-    console.log(
-      `${movie.title} — similarity: ${movie.similarity}`,
-    );
+    console.log(`${movie.title} — similarity: ${movie.similarity}`);
   }
 
   const recommendation = await generateMovieRecommendation(

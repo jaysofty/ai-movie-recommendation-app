@@ -6,6 +6,8 @@ export default function MovieResult({ recommendation, onReset }) {
   }
 
   const { movie, reason, matchHighlights = [] } = recommendation;
+  const posterUrl =
+    movie.posterUrl?.match(/\((https?:\/\/[^)]+)\)/)?.[1] || movie.posterUrl;
 
   return (
     <main className="result-page">
@@ -44,9 +46,9 @@ export default function MovieResult({ recommendation, onReset }) {
 
         <article className="result-card">
           <div className="result-poster-section">
-            {movie.posterUrl ? (
+            {posterUrl ? (
               <img
-                src={movie.posterUrl}
+                src={posterUrl}
                 alt={`${movie.title} poster`}
                 className="result-poster"
               />
