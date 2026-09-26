@@ -49,9 +49,13 @@ export async function generateRecommendation(preferences) {
   const candidates = await findMovieCandidates(preferences);
 
   console.log("\nRetrieved candidates:");
+  console.log("========== CANDIDATES BEFORE GROQ ==========");
+console.log(JSON.stringify(candidates, null, 2));
 
   for (const movie of candidates) {
-    console.log(`${movie.title} — similarity: ${movie.similarity}`);
+    console.log(
+      `${movie.title} — similarity: ${movie.similarity}`,
+    );
   }
 
   const recommendation = await generateMovieRecommendation(
@@ -59,15 +63,19 @@ export async function generateRecommendation(preferences) {
     candidates,
   );
 
+  console.log("========== CANDIDATES AFTER GROQ ==========");
+console.log(JSON.stringify(candidates, null, 2));
+
+
+  console.log("========== GROQ RESPONSE ==========");
+  console.log(recommendation);
+
   const selectedMovie = candidates.find(
     (movie) => movie.id === recommendation.movieId,
   );
 
-  console.log("\n========== GROQ RESPONSE ==========");
-console.dir(recommendation, { depth: null });
-
-console.log("\n========== SELECTED MOVIE ==========");
-console.dir(selectedMovie, { depth: null });
+  console.log("========== SELECTED MOVIE ==========");
+  console.log(selectedMovie);
 
   if (!selectedMovie) {
     throw new Error(
@@ -75,19 +83,22 @@ console.dir(selectedMovie, { depth: null });
     );
   }
 
-  console.log("\n========== FINAL RESPONSE ==========");
-console.dir(
-  {
-    movie: selectedMovie,
-    reason: recommendation.reason,
-    matchHighlights: recommendation.matchHighlights,
-  },
-  { depth: null },
-);
+  const finalMovie = {
+    ...selectedMovie,
+    posterUrl: selectedMovie.posterUrl?.replace(
+      /^\[(.*?)\]\((.*?)\)$/,
+      "$2",
+    ),
+  };
 
-  return {
-    movie: selectedMovie,
+  const finalResponse = {
+    movie: finalMovie,
     reason: recommendation.reason,
     matchHighlights: recommendation.matchHighlights,
   };
+
+  console.log("========== FINAL RESPONSE ==========");
+  console.log(finalResponse);
+
+  return finalResponse;
 }
