@@ -10,7 +10,17 @@ const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV === "production") {
   app.use(helmet());
 }
-app.use(cors());
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "https://ai-movie-recommendation-app-beta.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
