@@ -427,7 +427,7 @@ export async function generateRecommendation(preferences) {
     rating: selectedMovie.rating,
     posterUrl,
     runtimeMinutes: selectedMovie.runtimeMinutes,
-    similarity: selectedMovie.similarity,
+    // similarity: selectedMovie.similarity,
   };
 
   const finalResponse = {
