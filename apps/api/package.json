@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "main": "src/server.js",
-  "scripts": {
+   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "seed:movies": "node src/scripts/seedMovies.js",
+    "test:tmdb": "node src/scripts/testTmdb.js"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.0",

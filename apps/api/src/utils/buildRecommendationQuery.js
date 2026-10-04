@@ -1,31 +1,27 @@
 export function buildRecommendationQuery(preferences) {
-  const {
-    numberOfPeople,
-    duration,
-    favoriteMovie,
-    movieStyle,
-    mood,
-    strandedPerson,
-  } = preferences;
+  const { favoriteMovie, movieStyle, mood } = preferences;
 
-  return `
-I am choosing a movie for ${numberOfPeople || "a group of people"}.
+  const parts = ["Find a movie matching the following viewing preferences."];
 
-Available viewing time: ${duration || "flexible"}.
+  if (movieStyle) {
+    parts.push(
+      `Preferred genre, style, themes, and atmosphere: ${movieStyle}.`,
+    );
+  }
 
-A movie I already like is:
-${favoriteMovie || "No specific favorite movie provided"}.
+  if (mood) {
+    parts.push(`Desired emotional tone and mood: ${mood}.`);
+  }
 
-Preferred movie style:
-${movieStyle || "Any style"}.
+  if (favoriteMovie) {
+    parts.push(
+      `The viewer likes ${favoriteMovie} and wants a movie with a similar tone, themes, genre, atmosphere, or emotional experience.`,
+    );
+  }
 
-Desired mood:
-${mood || "Any mood"}.
+  parts.push(
+    "Prioritize similarity in genre, themes, tone, atmosphere, and emotional experience.",
+  );
 
-The movie should be suitable for:
-${strandedPerson || "a general audience"}.
-
-Find movies that are similar in themes, tone, genre,
-emotional experience, and overall viewing preference.
-  `.trim();
+  return parts.join("\n");
 }

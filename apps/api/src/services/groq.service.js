@@ -42,6 +42,15 @@ IMPORTANT RULES:
    treated as the only deciding factor.
 6. Return valid JSON only.
 7. Do not include markdown.
+8. Treat runtime constraints accurately.
+   - "under-1-hour" means 60 minutes or less.
+   - "1-2-hours" means between 60 and 120 minutes.
+   - "2-plus-hours" means 120 minutes or more.
+9. If a movie exceeds the requested duration, state that accurately.
+   Never claim that a runtime falls within the requested range when it does not.
+10. Do not mention semantic similarity scores, vector scores,
+    ranking scores, embeddings, retrieval systems, or other
+    implementation details in the recommendation shown to the user.
 `;
 
   const userPrompt = `
