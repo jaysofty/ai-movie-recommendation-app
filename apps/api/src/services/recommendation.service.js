@@ -30,6 +30,32 @@ function normalizeText(value = "") {
     .trim();
 }
 
+
+function normalizeMovieTitle(title = "") {
+  return title
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function excludeFavoriteMovie(candidates, favoriteMovie) {
+  if (!favoriteMovie) return candidates;
+
+  const normalizedFavorite = normalizeMovieTitle(favoriteMovie);
+
+  const filtered = candidates.filter((movie) => {
+    return normalizeMovieTitle(movie.title) !== normalizedFavorite;
+  });
+
+  console.log(
+    `Excluded favorite movie "${favoriteMovie}". ` +
+      `${candidates.length} → ${filtered.length} candidates.`,
+  );
+
+  return filtered;
+}
+
 /**
  * Common movie-style keywords that can be extracted from
  * the user's free-text movieStyle answer.
@@ -278,14 +304,26 @@ async function findMovieCandidates(preferences) {
   }
 
   // Convert DB rows to application movie objects.
+  // Convert DB rows to application movie objects.
   const semanticCandidates = data.map(formatMovie);
 
   // Apply deterministic genre, duration and rating signals.
   const rankedCandidates = rerankCandidates(semanticCandidates, preferences);
 
+  // The favorite movie is used as a taste reference during semantic
+  // retrieval, but it should not be eligible for recommendation.
+  const eligibleCandidates = excludeFavoriteMovie(
+    rankedCandidates,
+    preferences.favoriteMovie,
+  );
+
+  if (eligibleCandidates.length === 0) {
+    throw new Error("No alternative movie recommendations were found.");
+  }
+
   console.log("\n========== HYBRID RANKING ==========");
 
-  for (const movie of rankedCandidates) {
+  for (const movie of eligibleCandidates) {
     console.log({
       title: movie.title,
       semantic: movie.ranking.semanticScore.toFixed(4),
@@ -296,8 +334,9 @@ async function findMovieCandidates(preferences) {
     });
   }
 
-  // Groq only needs the five strongest candidates.
-  return rankedCandidates.slice(0, 5);
+  // Groq only receives eligible alternatives.
+  // The user's exact favorite movie can no longer be selected.
+  return eligibleCandidates.slice(0, 5);
 }
 
 

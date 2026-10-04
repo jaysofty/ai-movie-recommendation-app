@@ -5,10 +5,7 @@ const groq = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
 });
 
-export async function generateMovieRecommendation(
-  preferences,
-  candidates,
-) {
+export async function generateMovieRecommendation(preferences, candidates) {
   const candidateContext = candidates
     .map(
       (movie, index) => `
@@ -51,12 +48,45 @@ IMPORTANT RULES:
 10. Do not mention semantic similarity scores, vector scores,
     ranking scores, embeddings, retrieval systems, or other
     implementation details in the recommendation shown to the user.
+11. The viewer's favorite movie is a reference point for their taste.
+    Do not recommend the exact favorite movie itself.
+
+12. "Person they would want to be stranded with" is a soft
+    personality/taste signal only.
+
+13. Do not assume the stranded person must be an actor, director,
+    writer, producer, or other contributor to the recommended movie.
+
+14. Never claim that a movie matches because of the stranded person
+    unless the connection is genuinely useful as a broad taste signal.
+
+15. Prioritize the viewer's requested style, mood, runtime,
+    and overall movie preferences over the stranded-person signal.
 `;
 
   const userPrompt = `
 USER PREFERENCES:
 
-${JSON.stringify(preferences, null, 2)}
+Number of viewers: ${preferences.numberOfPeople || "Not provided"}
+Available duration: ${preferences.duration || "Not provided"}
+Favorite movie: ${preferences.favoriteMovie || "Not provided"}
+Preferred movie style: ${preferences.movieStyle || "Not provided"}
+Current mood: ${preferences.mood || "Not provided"}
+Person they would want to be stranded with: ${
+    preferences.strandedPerson || "Not provided"
+  }
+
+IMPORTANT INTERPRETATION:
+
+The favorite movie is a reference point for the viewer's taste.
+Do not recommend that exact movie.
+
+The stranded-person answer is a soft personality and taste signal.
+It does NOT mean the recommended movie must feature, be directed by,
+written by, produced by, or otherwise be associated with that person.
+
+Do not prioritize the stranded-person answer over movie style,
+mood, runtime, or overall viewing preferences.
 
 RETRIEVED MOVIE CANDIDATES:
 
