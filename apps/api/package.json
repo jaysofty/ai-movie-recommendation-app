@@ -2,6 +2,9 @@
   "name": "movierecommendation-api",
   "version": "1.0.0",
   "type": "module",
+   "engines": {
+    "node": "22.x"
+  },
   "main": "src/server.js",
    "scripts": {
     "dev": "nodemon src/server.js",
